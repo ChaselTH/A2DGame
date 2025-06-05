@@ -16,7 +16,8 @@ public static class GameInitializer
         var sr = ground.AddComponent<SpriteRenderer>();
         sr.sprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0,0,1,1), new Vector2(0.5f,0.5f));
         sr.color = Color.gray;
-        ground.transform.localScale = new Vector3(10f, 1f, 1f);
+        // make the ground much longer for easier testing
+        ground.transform.localScale = new Vector3(500f, 1f, 1f);
         ground.AddComponent<BoxCollider2D>();
     }
 
@@ -30,6 +31,8 @@ public static class GameInitializer
         player.AddComponent<BoxCollider2D>();
         var rb = player.AddComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        // scale player up so it is more visible
+        player.transform.localScale = new Vector3(3f, 3f, 1f);
         player.AddComponent<PlayerController>();
     }
 }

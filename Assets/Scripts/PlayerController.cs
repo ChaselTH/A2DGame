@@ -14,10 +14,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float move = Input.GetAxis("Horizontal");
+        float move = 0f;
+        if (Input.GetKey(KeyCode.A))
+            move = -1f;
+        else if (Input.GetKey(KeyCode.D))
+            move = 1f;
+
         rb.velocity = new Vector2(move * moveSpeed, rb.velocity.y);
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
