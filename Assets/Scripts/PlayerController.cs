@@ -2,38 +2,42 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public float jumpForce = 5f;
+    public float speed = 5f;
+    public float jumpForce = 10f;
     private Rigidbody2D rb;
-    private bool isGrounded;
+    private bool isGrounded = false;
+    public LayerMask jumpableLayers;
 
-    void Awake()
+    void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        float move = 0f;
-        if (Input.GetKey(KeyCode.A))
-            move = -1f;
-        else if (Input.GetKey(KeyCode.D))
-            move = 1f;
+        // 左右移动（可选）s
+        float move = Input.GetAxis("Horizontal");
+        transform.Translate(Vector2.right * move * speed * Time.deltaTime);
 
-        rb.velocity = new Vector2(move * moveSpeed, rb.velocity.y);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 3f, jumpableLayers);
 
+        // 空格跳跃
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+
+    void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.contacts.Length > 0 && collision.contacts[0].normal.y > 0.5f)
+        foreach (ContactPoint2D contact in collision.contacts)
         {
-            isGrounded = true;
+            if (contact.normal.y > 0.5f)  // 表示碰撞发生在角色下方
+            {
+                isGrounded = true;
+                return;
+            }
         }
     }
 
